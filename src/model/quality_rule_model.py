@@ -21,3 +21,11 @@ class QualityRuleModel(SQLiteBase):
     enum_value = Column(JSON, nullable=True)
     regex_expr = Column(String, nullable=True)
     is_active = Column(Boolean, default=False)  # 1 for active, 0 for inactive
+
+    def __repr__(self):
+        return f"""QualityRuleModel(
+        id={self.id},
+        rule_type={self.rule_type},
+        table_target={self.table_target},
+        column_target={self.column_target},
+        is_active={self.is_active})"""

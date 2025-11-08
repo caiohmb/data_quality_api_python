@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
+from contextlib import contextmanager
 
 SQLiteBase = declarative_base()
 
@@ -13,15 +14,13 @@ class SQLiteClient:
         self._SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self._engine)
         self._Base = declarative_base()
 
-    def __call__(self) -> Session:
-        session_local = self._SessionLocal()
+    @contextmanager
+    def get_session(self):
+        session = self._SessionLocal()
         try:
-            yield session_local
+            yield session
         finally:
-            session_local.close()
-
-    def _get_session(self) -> Session:
-        return next(self.__call__())
+            session.close()
 
 
 
